@@ -5,6 +5,7 @@ import Todo from "./Todo";
 export const ACTIONS = {
   ADD_TODO: "add_todo",
   TOGGLE_TODO: "toggle_todo",
+  DELETE_TODO: "delete_todo",
 };
 
 function reducer(todos, action) {
@@ -12,12 +13,16 @@ function reducer(todos, action) {
     case ACTIONS.ADD_TODO:
       return [...todos, newTodos(action.payload.name)];
     case ACTIONS.TOGGLE_TODO:
-      return todos.map(todo => {
+      return todos.map((todo) => {
         if (todo.id === action.payload.id) {
-          return {...todo, complete: !todo.complete}
+          return { ...todo, complete: !todo.complete };
         }
-      return todo
-      })
+        return todo;
+      });
+    case ACTIONS.DELETE_TODO:
+      return todos.filter((todo) => todo.id !== action.payload.id);
+    default:
+      return todos;
   }
 }
 
@@ -39,16 +44,16 @@ function App() {
 
   return (
     <>
-    <form onSubmit={handleSubit}>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-    </form>
-    {todos.map(todo => {
-return     <Todo key={todo.id} todo={todo} dispatch={dispatch}/>
-    })}
+      <form onSubmit={handleSubit}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </form>
+      {todos.map((todo) => {
+        return <Todo key={todo.id} todo={todo} dispatch={dispatch} />;
+      })}
     </>
   );
 }
